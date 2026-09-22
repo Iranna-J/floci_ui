@@ -1,28 +1,18 @@
 package com.example.flociapp.entity;
 
-import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 
-@Entity
-@Table(name = "users")
+import java.time.Instant;
+
+@DynamoDbBean
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(unique = true, nullable = false)
     private String username;
-
-    @Column(nullable = false)
     private String password;
-
-    @Column(unique = true)
     private String email;
-
     private String role;
-
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     public User() {
     }
@@ -32,24 +22,10 @@ public class User {
         this.password = password;
         this.email = email;
         this.role = role;
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = Instant.now().toString();
     }
 
-    @PrePersist
-    public void prePersist() {
-        if (this.createdAt == null) {
-            this.createdAt = LocalDateTime.now();
-        }
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    @DynamoDbPartitionKey
     public String getUsername() {
         return username;
     }
@@ -82,11 +58,11 @@ public class User {
         this.role = role;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public String getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
     }
 }

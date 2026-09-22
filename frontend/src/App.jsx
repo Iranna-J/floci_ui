@@ -39,16 +39,16 @@ export default function App() {
             <div className="pulse-dot" />
             <div>
               <div style={{ fontWeight: 600, fontSize: '0.95rem' }}>
-                Baseline Full-Stack Project (Clean State)
+                AWS DynamoDB Connected via Floci
               </div>
               <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-                Spring Boot (Port 8080) &bull; React Vite (Port 5173) &bull; PostgreSQL (floci_ui)
+                Spring Boot (Port 8080) &bull; React (Port 5173) &bull; Floci DynamoDB (Port 4566)
               </div>
             </div>
           </div>
           <div>
-            <span style={{ fontSize: '0.75rem', padding: '0.25rem 0.6rem', background: '#0f172a', border: '1px solid #334155', borderRadius: '6px', color: '#38bdf8' }}>
-              Step 1: Project Skeleton Ready
+            <span style={{ fontSize: '0.75rem', padding: '0.25rem 0.6rem', background: '#0f172a', border: '1px solid #334155', borderRadius: '6px', color: '#10b981' }}>
+              Step 2: DynamoDB Active
             </span>
           </div>
         </section>
