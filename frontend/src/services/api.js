@@ -36,5 +36,39 @@ export const api = {
       throw new Error(err.message || 'Registration failed');
     }
     return res.json();
+  },
+
+  authHeaders() {
+    const token = getAuthToken();
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  },
+
+  async getNotes() {
+    const res = await fetch(`${API_BASE}/notes`, {
+      headers: { ...this.authHeaders() }
+    });
+    if (!res.ok) throw new Error('Failed to fetch notes');
+    return res.json();
+  },
+
+  async createNote(content) {
+    const res = await fetch(`${API_BASE}/notes`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...this.authHeaders()
+      },
+      body: JSON.stringify({ content })
+    });
+    if (!res.ok) throw new Error('Failed to create note');
+    return res.json();
+  },
+
+  async deleteNote(id) {
+    const res = await fetch(`${API_BASE}/notes/${id}`, {
+      method: 'DELETE',
+      headers: { ...this.authHeaders() }
+    });
+    if (!res.ok) throw new Error('Failed to delete note');
   }
 };

@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import AuthModal from './components/AuthModal';
 import { getCurrentUser, removeAuthToken, removeCurrentUser } from './services/api';
 import { ShieldCheck, CheckCircle, ArrowRight, User, Database, Server } from 'lucide-react';
+import NotesTester from './components/NotesTester';
 
 export default function App() {
   const [user, setUser] = useState(getCurrentUser());
@@ -133,6 +134,8 @@ export default function App() {
             </div>
           </div>
         )}
+
+        <NotesTester />
       </main>
 
       {/* Auth Modal */}

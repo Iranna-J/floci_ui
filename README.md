@@ -131,6 +131,20 @@ curl -s -X POST http://localhost:4566/ \
 
 ---
 
+## 📝 Multi-Table DynamoDB Architecture Example (`Notes` Table)
+
+To see how to add any new table to DynamoDB and connect it via Spring Boot, we implemented a sample `Notes` table:
+
+1. **Entity**: [`Note.java`](backend/src/main/java/com/example/flociapp/entity/Note.java) annotated with `@DynamoDbBean` and `@DynamoDbPartitionKey`.
+2. **Repository**: [`NoteRepository.java`](backend/src/main/java/com/example/flociapp/repository/NoteRepository.java) using `DynamoDbTable<Note>`.
+3. **Table Initializer**: [`DynamoDbTableInitializer.java`](backend/src/main/java/com/example/flociapp/config/DynamoDbTableInitializer.java) auto-provisions `Notes` on startup.
+4. **REST Endpoints**:
+   - `POST /api/notes`: Saves a note `{ "content": "Hello DynamoDB!" }`.
+   - `GET /api/notes`: Lists all notes.
+   - `DELETE /api/notes/{id}`: Deletes a note by ID.
+
+---
+
 ## 🗺️ Step-by-Step Learning Roadmap
 
 1. **Step 1 (Complete)**: Clean baseline Full-Stack project (Spring Boot 3 + Java 21 + React Vite + JWT Auth).
