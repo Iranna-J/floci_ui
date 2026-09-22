@@ -19,5 +19,6 @@ dist/
 .vscode/
 .DS_Store
 
-# Floci-Data
+# Floci-Data & Postgres-Data
 floci-data
+postgres-data
