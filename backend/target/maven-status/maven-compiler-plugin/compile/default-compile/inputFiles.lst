@@ -1,0 +1,11 @@
+/home/basavaraj/Music/Iranna/floci-aws-app/backend/src/main/java/com/example/flociapp/dto/RegisterRequest.java
+/home/basavaraj/Music/Iranna/floci-aws-app/backend/src/main/java/com/example/flociapp/service/AuthService.java
+/home/basavaraj/Music/Iranna/floci-aws-app/backend/src/main/java/com/example/flociapp/config/SecurityConfig.java
+/home/basavaraj/Music/Iranna/floci-aws-app/backend/src/main/java/com/example/flociapp/FlociAppApplication.java
+/home/basavaraj/Music/Iranna/floci-aws-app/backend/src/main/java/com/example/flociapp/config/JwtAuthenticationFilter.java
+/home/basavaraj/Music/Iranna/floci-aws-app/backend/src/main/java/com/example/flociapp/dto/AuthResponse.java
+/home/basavaraj/Music/Iranna/floci-aws-app/backend/src/main/java/com/example/flociapp/repository/UserRepository.java
+/home/basavaraj/Music/Iranna/floci-aws-app/backend/src/main/java/com/example/flociapp/entity/User.java
+/home/basavaraj/Music/Iranna/floci-aws-app/backend/src/main/java/com/example/flociapp/controller/AuthController.java
+/home/basavaraj/Music/Iranna/floci-aws-app/backend/src/main/java/com/example/flociapp/dto/AuthRequest.java
+/home/basavaraj/Music/Iranna/floci-aws-app/backend/src/main/java/com/example/flociapp/config/JwtTokenProvider.java
