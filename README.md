@@ -1,137 +1,90 @@
-# Floci Local AWS Explorer (Spring Boot + React + S3)
+# Floci AWS Learning Project (Spring Boot + React)
 
-A full-stack, cloud-native project to learn and experiment with **AWS Services locally using Floci** — a fast, free, open-source local AWS emulator built with Quarkus Native.
+A full-stack project designed to learn **AWS Cloud services locally using Floci** — a fast, free, open-source local AWS emulator.
 
 ---
 
 ## 🌟 What is Floci?
-[Floci](https://github.com/floci-io/floci) is a native-compiled local cloud emulator. Key advantages:
-- **Instant startup (~24ms)**: Boots up hundreds of times faster than traditional heavy emulators.
-- **Tiny footprint (~13MB idle memory)**: Runs easily on any laptop without fan noise or high RAM usage.
-- **100% Free & Open Source**: No cloud accounts, credit cards, or paid feature paywalls.
-- **Drop-in AWS Compatibility**: Interacts seamlessly with AWS SDKs and the AWS CLI on port `4566`.
+[Floci](https://github.com/floci-io/floci) is a lightweight, native-compiled (Quarkus Native) local AWS emulator:
+- **Instant startup (~24ms)**: Boots up in milliseconds.
+- **Tiny footprint (~13MB idle memory)**: Very low RAM usage.
+- **100% Free & Open Source**: No cloud bills, AWS account, or credit card required.
+- **Drop-in AWS Compatibility**: Runs AWS services (DynamoDB, S3, RDS, SQS) on port `4566`.
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Project Architecture & Current State
 
 ```
-   ┌───────────────────────────────────────────────┐
-   │ React.js Frontend (Vite + Modern UI)          │ http://localhost:5173
-   │  - User Registration & Login (JWT)            │
-   │  - Drag & Drop Upload Zone                    │
-   │  - Image Previews & S3 Object Gallery         │
-   └──────────────────────┬────────────────────────┘
-                          │ REST API + JWT
-                          ▼
-   ┌───────────────────────────────────────────────┐
-   │ Spring Boot Backend (Java 21, Spring Boot 3)  │ http://localhost:8080
-   │  - Spring Security (Stateless JWT Auth)       │
-   │  - S3StorageService (AWS SDK for Java v2)     │
-   │  - Automatic S3 Bucket Provisioning           │
-   │  - Embedded H2 Database for User & Metadata   │
-   └──────────────────────┬────────────────────────┘
-                          │ AWS S3 API (Endpoint: http://localhost:4566)
-                          ▼
-   ┌───────────────────────────────────────────────┐
-   │ Floci AWS Emulator Container                  │ http://localhost:4566
-   │  - Emulates AWS S3 (Bucket: floci-uploads)    │
-   └───────────────────────────────────────────────┘
+ ┌──────────────────────────────────────────────┐
+ │ React Frontend (Vite + Modern UI)            │ http://localhost:5173
+ │  - User Registration & Login Forms           │
+ │  - JWT Auth State & Dashboard                │
+ └──────────────────────┬───────────────────────┘
+                        │ REST API (JSON + JWT)
+                        ▼
+ ┌──────────────────────────────────────────────┐
+ │ Spring Boot Backend (Java 21, Spring Boot 3) │ http://localhost:8080
+ │  - Spring Security (Stateless JWT Auth)      │
+ │  - BCrypt Password Hashing                   │
+ │  - Spring Data JPA Repository                │
+ └──────────────────────┬───────────────────────┘
+                        │ JDBC (Port 5432)
+                        ▼
+ ┌──────────────────────────────────────────────┐
+ │ PostgreSQL Database                          │ localhost:5432
+ │  - Database: floci_ui                        │
+ │  - User: floci_ui / Password: 1100           │
+ └──────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🚀 Quick Start Guide
+## 🚀 How to Run the Project
 
-### Step 1: Start the Floci AWS Emulator
-You can start Floci using Docker or Docker Compose:
+### 1. Start the Floci AWS Emulator
+Inside the project root:
 
 ```bash
-# Using Docker Compose (Recommended)
-cd /home/basavaraj/Music/Iranna/floci-aws-app
 docker compose up -d
-
-# OR using Docker CLI directly:
-docker run -d --name floci-aws -p 4566:4566 floci/floci:latest
 ```
 
-Verify Floci is running:
+Verify Floci is healthy on port `4566`:
 ```bash
 curl http://localhost:4566
 ```
-*(You will receive an XML response from Floci's S3 service confirming it is ready!)*
 
 ---
 
-### Step 2: Start the Spring Boot Backend
-Open a terminal and run:
+### 2. Start the Spring Boot Backend
+In a new terminal:
 
 ```bash
-cd /home/basavaraj/Music/Iranna/floci-aws-app/backend
+cd backend
 mvn spring-boot:run
 ```
-*(On startup, the backend automatically checks and creates the S3 bucket `floci-uploads` in Floci if it doesn't already exist).*
 
 - Backend API: `http://localhost:8080`
-- H2 Console: `http://localhost:8080/h2-console` (JDBC URL: `jdbc:h2:mem:flocidb`, Username: `sa`, Password: empty)
+- Database: Connected to PostgreSQL `floci_ui`
 
 ---
 
-### Step 3: Start the React Frontend
-In a new terminal, run:
+### 3. Start the React Frontend
+In a new terminal:
 
 ```bash
-cd /home/basavaraj/Music/Iranna/floci-aws-app/frontend
+cd frontend
 npm run dev
 ```
 
 Open your browser at:
 👉 **`http://localhost:5173`**
 
-1. Click **Register** or **Sign In** to create a test user.
-2. Drag & drop an image (PNG/JPG) or file (PDF/TXT/ZIP).
-3. See your file stored directly in Floci S3 and displayed in your gallery!
-
 ---
 
-## 🛠️ Testing with AWS CLI
+## 🗺️ Step-by-Step Learning Roadmap
 
-You can use the official `aws` CLI to inspect what is happening inside Floci directly:
-
-```bash
-# List all buckets in Floci
-aws s3 ls --endpoint-url=http://localhost:4566
-
-# List files inside the bucket
-aws s3 ls s3://floci-uploads/ --endpoint-url=http://localhost:4566
-
-# Upload a test file directly from terminal to Floci
-echo "Hello from AWS CLI and Floci!" > sample.txt
-aws s3 cp sample.txt s3://floci-uploads/ --endpoint-url=http://localhost:4566
-
-# Download a file from Floci
-aws s3 cp s3://floci-uploads/sample.txt ./downloaded-sample.txt --endpoint-url=http://localhost:4566
-```
-
----
-
-## ⚙️ How AWS S3 is Configured in Spring Boot
-
-In `com.example.flociapp.config.AwsS3Config`:
-
-```java
-@Bean
-public S3Client s3Client() {
-    return S3Client.builder()
-            .endpointOverride(URI.create("http://localhost:4566"))
-            .region(Region.US_EAST_1)
-            .credentialsProvider(StaticCredentialsProvider.create(
-                    AwsBasicCredentials.create("test", "test")))
-            .forcePathStyle(true) // Required for local S3 emulators
-            .build();
-}
-```
-Key notes:
-1. `endpointOverride(...)` points traffic to Floci on port `4566`.
-2. `forcePathStyle(true)` routes requests as `http://localhost:4566/bucket/key` instead of DNS virtual-host style `http://bucket.localhost:4566/key`.
-3. `BucketInitializer` executes on startup to auto-create `floci-uploads`.
+1. **Step 1 (Complete)**: Clean baseline project with user registration, login, and database persistence.
+2. **Step 2 (In Progress)**: Run Floci with Docker Compose and verify local AWS cloud services (port `4566`).
+3. **Step 3**: Store database data in AWS (Integrate AWS DynamoDB).
+4. **Step 4**: Add AWS S3 for uploading and storing images and files.
