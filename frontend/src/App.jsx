@@ -42,7 +42,7 @@ export default function App() {
                 Baseline Full-Stack Project (Clean State)
               </div>
               <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-                Spring Boot (Port 8080) &bull; React Vite (Port 5173) &bull; Persistent H2 Database
+                Spring Boot (Port 8080) &bull; React Vite (Port 5173) &bull; PostgreSQL (floci_ui)
               </div>
             </div>
           </div>
