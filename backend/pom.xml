@@ -15,25 +15,12 @@
     <artifactId>floci-aws-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>floci-aws-backend</name>
-    <description>Spring Boot Backend using AWS DynamoDB in Floci</description>
+    <description>Spring Boot Backend with PostgreSQL and JWT Authentication</description>
 
     <properties>
         <java.version>21</java.version>
-        <aws.sdk.version>2.25.62</aws.sdk.version>
         <jwt.version>0.11.5</jwt.version>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>software.amazon.awssdk</groupId>
-                <artifactId>bom</artifactId>
-                <version>${aws.sdk.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <!-- Spring Boot Web -->
@@ -48,14 +35,15 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!-- AWS SDK for Java v2 (DynamoDB & Enhanced Client) -->
+        <!-- Spring Data JPA & PostgreSQL Driver -->
         <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>dynamodb</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
-            <groupId>software.amazon.awssdk</groupId>
-            <artifactId>dynamodb-enhanced</artifactId>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
         </dependency>
 
         <!-- JWT Dependencies -->

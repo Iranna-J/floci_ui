@@ -1,15 +1,6 @@
-# Floci AWS Learning Project (Spring Boot + React)
+# Floci AWS Learning Project (Spring Boot + React + PostgreSQL)
 
 A full-stack project designed to learn **AWS Cloud services locally using Floci** — a fast, free, open-source local AWS emulator.
-
----
-
-## 🌟 What is Floci?
-[Floci](https://github.com/floci-io/floci) is a lightweight, native-compiled (Quarkus Native) local AWS emulator:
-- **Instant startup (~24ms)**: Boots up in milliseconds.
-- **Tiny footprint (~13MB idle memory)**: Extremely low RAM usage.
-- **100% Free & Open Source**: No cloud bills, AWS account, or credit cards required.
-- **Drop-in AWS Compatibility**: Speaks real AWS wire protocols (DynamoDB, S3, RDS, SQS) on port `4566`.
 
 ---
 
@@ -27,33 +18,33 @@ A full-stack project designed to learn **AWS Cloud services locally using Floci*
  │ Spring Boot Backend (Java 21, Spring Boot 3) │ http://localhost:8080
  │  - Spring Security (Stateless JWT Auth)      │
  │  - BCrypt Password Hashing                   │
- │  - AWS SDK for Java v2 (DynamoDbEnhanced)    │
- └──────────────────────┬───────────────────────┘
-                        │ AWS DynamoDB Protocol (Port 4566)
-                        ▼
- ┌──────────────────────────────────────────────┐
- │ Floci AWS Emulator Container                 │ http://localhost:4566
- │  - Service: AWS DynamoDB (NoSQL)             │
- │  - Table: "Users" (Key: username)            │
- │  - Storage: Persistent Disk (./floci-data)   │
- └──────────────────────────────────────────────┘
+ │  - Spring Data JPA + Hibernate               │
+ └───────────┬──────────────────────┬───────────┘
+             │                      │
+             │ PostgreSQL (5432)    │ AWS S3 (4566)
+             ▼                      ▼
+ ┌────────────────────────┐  ┌────────────────────────┐
+ │ PostgreSQL 15 Database │  │ Floci AWS Emulator     │
+ │ - DB: floci_ui         │  │ - S3 Bucket Storage    │
+ │ - User: floci_ui       │  │ - Port: 4566           │
+ │ - Port: 5432           │  └────────────────────────┘
+ └────────────────────────┘
 ```
 
 ---
 
 ## 🚀 How to Run the Project
 
-### 1. Start the Floci AWS Emulator
+### 1. Start Docker Containers (PostgreSQL & Floci)
 In the project root directory:
 
 ```bash
 docker compose up -d
 ```
 
-Verify Floci is healthy on port `4566`:
-```bash
-curl http://localhost:4566
-```
+This starts:
+- **`floci-postgres`**: PostgreSQL database on port `5432` (DB: `floci_ui`, User: `floci_ui`, Password: `1100`).
+- **`floci-aws`**: Floci local AWS emulator on port `4566`.
 
 ---
 
@@ -66,8 +57,8 @@ mvn spring-boot:run
 ```
 
 - Backend API: `http://localhost:8080`
-- Database: Connected to **AWS DynamoDB** running in Floci.
-- *On startup, Spring Boot automatically verifies and creates the `Users` table in Floci if it does not exist.*
+- Database: Connected to **PostgreSQL** (`jdbc:postgresql://localhost:5432/floci_ui`).
+- Hibernate automatically creates and updates the `users` table.
 
 ---
 
@@ -84,55 +75,22 @@ Open your browser at:
 
 ---
 
-## 💾 Permanent Disk Persistence (`./floci-data`)
+## 🔍 Inspecting the Database
 
-All DynamoDB data is configured to **persist permanently to your local disk** using Docker volumes in `docker-compose.yml`:
-
-- **Path**: `./floci-data/`
-- **Files**:
-  - `dynamodb-tables.json`: Table definitions (e.g., `Users` table schema).
-  - `dynamodb-items.json`: User items, hashed passwords, and emails.
-- **Behavior**: You can restart your machine or stop the Docker container anytime—when Floci restarts, it automatically reloads all tables and user data from this folder.
-
----
-
-## 🔍 How to View and Inspect Database Data
-
-### Method 1: Visual Web Dashboard (Recommended)
-Run the dedicated DynamoDB visual dashboard in your terminal:
+Connect to PostgreSQL directly using `psql`:
 
 ```bash
-DYNAMO_ENDPOINT=http://localhost:4566 npx -y dynamodb-admin
+PGPASSWORD=1100 psql -h localhost -p 5432 -U floci_ui -d floci_ui
 ```
 
-Then open your browser to:
-👉 **`http://localhost:8001`**
-
-- Click on the **`Users`** table to view, edit, search, and delete rows in a spreadsheet-like GUI.
-
-### Method 2: Direct Terminal Query (`curl` + `jq`)
-To scan all registered users directly from your terminal:
-
-```bash
-curl -s -X POST http://localhost:4566/ \
-  -H "X-Amz-Target: DynamoDB_20120810.Scan" \
-  -H "Content-Type: application/x-amz-json-1.0" \
-  -d '{"TableName": "Users"}' | jq .
-```
-
-To fetch a single user by username:
-
-```bash
-curl -s -X POST http://localhost:4566/ \
-  -H "X-Amz-Target: DynamoDB_20120810.GetItem" \
-  -H "Content-Type: application/x-amz-json-1.0" \
-  -d '{"TableName": "Users", "Key": {"username": {"S": "iranna"}}}' | jq .
+Query registered users:
+```sql
+SELECT id, username, email, role, created_at FROM users;
 ```
 
 ---
 
 ## 🗺️ Step-by-Step Learning Roadmap
 
-1. **Step 1 (Complete)**: Clean baseline Full-Stack project (Spring Boot 3 + Java 21 + React Vite + JWT Auth).
-2. **Step 2 (Complete)**: Floci AWS Emulator setup with **AWS DynamoDB**, permanent disk persistence (`./floci-data`), and visual table inspection.
-3. **Step 3 (Next)**: Add **AWS S3** to Floci for uploading, streaming, and managing images and files.
+1. **Step 1 (Complete)**: Clean baseline Full-Stack project (Spring Boot 3 + Java 21 + React Vite + PostgreSQL + JWT Auth).
+2. **Step 2 (Next)**: Add **AWS S3** in Floci for uploading, viewing, and managing images and files.
