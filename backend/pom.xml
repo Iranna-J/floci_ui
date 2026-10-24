@@ -15,12 +15,25 @@
     <artifactId>floci-aws-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>floci-aws-backend</name>
-    <description>Spring Boot Backend with PostgreSQL and JWT Authentication</description>
+    <description>Spring Boot Backend with AWS RDS PostgreSQL, AWS S3, and JWT Authentication</description>
 
     <properties>
         <java.version>21</java.version>
+        <aws.sdk.version>2.25.62</aws.sdk.version>
         <jwt.version>0.11.5</jwt.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>software.amazon.awssdk</groupId>
+                <artifactId>bom</artifactId>
+                <version>${aws.sdk.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <!-- Spring Boot Web -->
@@ -44,6 +57,12 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
+        </dependency>
+
+        <!-- AWS SDK for Java v2 (S3) -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
         </dependency>
 
         <!-- JWT Dependencies -->
