@@ -36,5 +36,83 @@ export const api = {
       throw new Error(err.message || 'Registration failed');
     }
     return res.json();
+  },
+
+  async uploadFile(file) {
+    const token = getAuthToken();
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const res = await fetch(`${API_BASE}/files/upload`, {
+      method: 'POST',
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
+      body: formData
+    });
+
+    if (!res.ok) {
+      if (res.status === 401 || res.status === 403) {
+        removeAuthToken();
+        removeCurrentUser();
+        throw new Error('Your login session has expired. Please sign in again.');
+      }
+      const err = await res.json().catch(() => ({ message: 'File upload failed' }));
+      throw new Error(err.message || 'File upload failed');
+    }
+    return res.json();
+  },
+
+  async getFiles() {
+    const token = getAuthToken();
+    const res = await fetch(`${API_BASE}/files`, {
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      }
+    });
+
+    if (!res.ok) {
+      if (res.status === 401 || res.status === 403) {
+        removeAuthToken();
+        removeCurrentUser();
+        throw new Error('Your login session has expired. Please sign in again.');
+      }
+      const err = await res.json().catch(() => ({ message: 'Failed to fetch files' }));
+      throw new Error(err.message || 'Failed to fetch files');
+    }
+    return res.json();
+  },
+
+  async deleteFile(id) {
+    const token = getAuthToken();
+    const res = await fetch(`${API_BASE}/files/${id}`, {
+      method: 'DELETE',
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      }
+    });
+
+    if (!res.ok) {
+      if (res.status === 401 || res.status === 403) {
+        removeAuthToken();
+        removeCurrentUser();
+        throw new Error('Your login session has expired. Please sign in again.');
+      }
+      const err = await res.json().catch(() => ({ message: 'Failed to delete file' }));
+      throw new Error(err.message || 'Failed to delete file');
+    }
+    return res.json();
+  },
+
+
+  getFileViewUrl(id) {
+    const token = getAuthToken();
+    return `${API_BASE}/files/view/${id}${token ? `?token=${encodeURIComponent(token)}` : ''}`;
+  },
+
+  getFileDownloadUrl(id) {
+    const token = getAuthToken();
+    return `${API_BASE}/files/download/${id}${token ? `?token=${encodeURIComponent(token)}` : ''}`;
   }
 };
+
