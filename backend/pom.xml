@@ -59,10 +59,14 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- AWS SDK for Java v2 (S3) -->
+        <!-- AWS SDK for Java v2 (S3 & Lambda) -->
         <dependency>
             <groupId>software.amazon.awssdk</groupId>
             <artifactId>s3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>lambda</artifactId>
         </dependency>
 
         <!-- JWT Dependencies -->

@@ -104,7 +104,6 @@ export const api = {
     return res.json();
   },
 
-
   getFileViewUrl(id) {
     const token = getAuthToken();
     return `${API_BASE}/files/view/${id}${token ? `?token=${encodeURIComponent(token)}` : ''}`;
@@ -113,6 +112,58 @@ export const api = {
   getFileDownloadUrl(id) {
     const token = getAuthToken();
     return `${API_BASE}/files/download/${id}${token ? `?token=${encodeURIComponent(token)}` : ''}`;
+  },
+
+  // ⚡ AWS Lambda & Serverless Explorer APIs
+  async runServerlessInApp(payload) {
+    const token = getAuthToken();
+    const res = await fetch(`${API_BASE}/serverless/thumbnail/in-app`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      if (res.status === 401 || res.status === 403) {
+        removeAuthToken();
+        removeCurrentUser();
+        throw new Error('Your login session has expired. Please sign in again.');
+      }
+      const err = await res.json().catch(() => ({ message: 'Execution failed' }));
+      throw new Error(err.message || 'Execution failed');
+    }
+    return res.json();
+  },
+
+  async runServerlessViaLambda(payload) {
+    const token = getAuthToken();
+    const res = await fetch(`${API_BASE}/serverless/thumbnail/lambda`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      if (res.status === 401 || res.status === 403) {
+        removeAuthToken();
+        removeCurrentUser();
+        throw new Error('Your login session has expired. Please sign in again.');
+      }
+      const err = await res.json().catch(() => ({ message: 'Lambda execution failed' }));
+      throw new Error(err.message || 'Lambda execution failed');
+    }
+    return res.json();
+  },
+
+  getServerlessThumbnailUrl(key) {
+    const token = getAuthToken();
+    return `${API_BASE}/serverless/thumbnail-view?key=${encodeURIComponent(key)}${token ? `&token=${encodeURIComponent(token)}` : ''}`;
   }
 };
 

@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { api, getAuthToken } from '../services/api';
+import { api } from '../services/api';
 import { 
   UploadCloud, 
   FileText, 
-  Image as ImageIcon, 
   Trash2, 
   Download, 
   ExternalLink, 
@@ -75,7 +74,6 @@ export default function FileUploadSection({ user }) {
       setSuccess('');
       const uploadedRecord = await api.uploadFile(file);
       setSuccess(`"${uploadedRecord.fileName}" uploaded successfully to AWS S3!`);
-      // Reload list
       await loadFiles();
     } catch (err) {
       setError(err.message || 'Upload failed');
@@ -125,7 +123,7 @@ export default function FileUploadSection({ user }) {
         <div>
           <div className="card-title">
             <UploadCloud size={24} color="#818cf8" />
-            <span>AWS S3 File Storage (Floci Emulator)</span>
+            <span>Step 3: AWS S3 File Storage (Floci Emulator)</span>
           </div>
           <p style={{ fontSize: '0.85rem', color: '#94a3b8', marginTop: '0.25rem' }}>
             Binary files stored in S3 bucket <code style={{ color: '#38bdf8' }}>floci-uploads</code> &bull; Metadata tracked in RDS PostgreSQL
@@ -182,8 +180,8 @@ export default function FileUploadSection({ user }) {
             <span>{error}</span>
           </div>
           {error.includes('expired') && (
-            <button
-              className="btn btn-primary"
+            <button 
+              className="btn btn-primary" 
               style={{ padding: '0.3rem 0.75rem', fontSize: '0.8rem' }}
               onClick={() => window.location.reload()}
             >
@@ -192,7 +190,6 @@ export default function FileUploadSection({ user }) {
           )}
         </div>
       )}
-
 
       {success && (
         <div style={{
@@ -301,7 +298,6 @@ export default function FileUploadSection({ user }) {
                         alt={file.fileName}
                         loading="lazy"
                         onError={(e) => {
-                          // Fallback to icon if preview fails
                           e.target.style.display = 'none';
                           e.target.parentElement.innerHTML = '<div style="color: #64748b"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div>';
                         }}

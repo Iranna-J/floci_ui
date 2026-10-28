@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import AuthModal from './components/AuthModal';
 import FileUploadSection from './components/FileUploadSection';
+import ServerlessLabSection from './components/ServerlessLabSection';
 import { getCurrentUser, removeAuthToken, removeCurrentUser } from './services/api';
-import { ShieldCheck, CheckCircle, ArrowRight, User, Database, Server, UploadCloud, Layers } from 'lucide-react';
+import { ShieldCheck, CheckCircle, ArrowRight, User, Database, Server, UploadCloud, Layers, Zap } from 'lucide-react';
 
 export default function App() {
   const [user, setUser] = useState(getCurrentUser());
@@ -87,7 +88,7 @@ export default function App() {
                 🗺️ Learning Roadmap:
               </h3>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
                 <div style={{ background: '#1e293b', border: '1px solid #10b981', borderRadius: '10px', padding: '1rem' }}>
                   <div style={{ fontSize: '0.8rem', color: '#10b981', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.25rem' }}>
                     Step 1 (Done)
@@ -108,20 +109,33 @@ export default function App() {
                   </div>
                 </div>
 
-                <div style={{ background: '#1e293b', border: '2px solid #38bdf8', borderRadius: '10px', padding: '1rem', boxShadow: '0 0 12px rgba(56, 189, 248, 0.15)' }}>
-                  <div style={{ fontSize: '0.8rem', color: '#38bdf8', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.25rem' }}>
-                    Step 3 (Active)
+                <div style={{ background: '#1e293b', border: '1px solid #10b981', borderRadius: '10px', padding: '1rem' }}>
+                  <div style={{ fontSize: '0.8rem', color: '#10b981', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+                    Step 3 (Done)
                   </div>
-                  <div style={{ fontWeight: 600, marginBottom: '0.25rem' }}>AWS S3 File Upload</div>
+                  <div style={{ fontWeight: 600, marginBottom: '0.25rem' }}>AWS S3 File Storage</div>
                   <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-                    AWS SDK v2 S3 Client + Dual Storage (S3 Binary + RDS Metadata).
+                    AWS SDK v2 S3 Client + Dual Storage in S3 & RDS.
+                  </div>
+                </div>
+
+                <div style={{ background: '#1e293b', border: '2px solid #f59e0b', borderRadius: '10px', padding: '1rem', boxShadow: '0 0 12px rgba(245, 158, 11, 0.15)' }}>
+                  <div style={{ fontSize: '0.8rem', color: '#f59e0b', fontWeight: 700, textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+                    Step 4 (Active & Complete)
+                  </div>
+                  <div style={{ fontWeight: 600, marginBottom: '0.25rem' }}>AWS Lambda Lab</div>
+                  <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                    In-App & AWS Lambda Container active & verified!
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* S3 File Upload Section */}
+            {/* Step 3: Pure S3 File Upload Section */}
             <FileUploadSection user={user} />
+
+            {/* Step 4: Dedicated Serverless & AWS Lambda Lab */}
+            <ServerlessLabSection user={user} />
           </>
         ) : (
           <div className="card" style={{ textAlign: 'center', padding: '3rem 1.5rem' }}>

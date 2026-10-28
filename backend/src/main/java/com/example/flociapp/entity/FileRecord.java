@@ -29,6 +29,18 @@ public class FileRecord {
     @Column(nullable = false)
     private LocalDateTime uploadedAt;
 
+    @Column(nullable = true)
+    private String thumbnailS3Key;
+
+    @Column(nullable = true)
+    private String dimensions;
+
+    @Column(nullable = true)
+    private String processedBy;
+
+    @Column(nullable = true)
+    private Long processingTimeMs;
+
     public FileRecord() {
     }
 
@@ -102,5 +114,37 @@ public class FileRecord {
 
     public void setUploadedAt(LocalDateTime uploadedAt) {
         this.uploadedAt = uploadedAt;
+    }
+
+    public String getThumbnailS3Key() {
+        return thumbnailS3Key;
+    }
+
+    public void setThumbnailS3Key(String thumbnailS3Key) {
+        this.thumbnailS3Key = thumbnailS3Key;
+    }
+
+    public String getDimensions() {
+        return dimensions;
+    }
+
+    public void setDimensions(String dimensions) {
+        this.dimensions = dimensions;
+    }
+
+    public String getProcessedBy() {
+        return processedBy;
+    }
+
+    public void setProcessedBy(String processedBy) {
+        this.processedBy = processedBy;
+    }
+
+    public Long getProcessingTimeMs() {
+        return processingTimeMs;
+    }
+
+    public void setProcessingTimeMs(Long processingTimeMs) {
+        this.processingTimeMs = processingTimeMs;
     }
 }
